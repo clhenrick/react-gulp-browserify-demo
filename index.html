@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+  </head>
+  <body>
+    <!-- Code from http://tylermcginnis.com/reactjs-tutorial-a-comprehensive-guide-to-building-apps-with-react/ -->
+    <div id="app"></div>
+    <script type="text/babel">
+
+    var data = {
+      name: "clhenrick",
+      friends: ["boris", "butt head", "beavis", "bla bla bla"]
+    };
+
+    /* super basic example of a component */
+    var HelloWorld = React.createClass({
+      render: function() {
+        return (
+          <div>
+            Hello World!
+          </div>
+        )
+      }
+    });
+
+    /* to render the "HelloWorld" component */
+    // ReactDOM.render(<HelloWorld />, document.getElementById('app')); 
+
+    /* Example of a component with state & state change */
+    var HelloUser = React.createClass({
+      getInitialState: function() {
+        return {
+          data
+        }
+      },
+      handleChange: function(e) {
+        this.setState({
+          username : e.target.value
+        })
+      },
+      render: function(){
+        return (
+          <div>
+            Hello {this.state.username} <br/>
+            Change Name: <input type="text" value={this.state.username} onChange={this.handleChange} />
+          </div>
+        )
+      }
+    });
+
+    // ReactDOM.render(<HelloUser />, document.getElementById('app'));
+
+    /* 
+     * Example showing a parent passing data to a child component 
+     * we pass an array of "friends" to the ShowList component which gets rendered into a list
+     * also add a "add friend" component which will add a new list item containing the friend's name
+    */
+    var FriendsContainer = React.createClass({
+      getInitialState: function() {
+        return data
+      },
+      
+      // will be invoked once before first render
+      componentWillMount: function() {
+        // calling setState here does not cause a re-render
+        // eg: set up a reference to a firebase database
+        alert('component about to be mounted! in componentWillMount');
+      },
+
+      // invoked once after first render
+      componentDidMount: function() {
+        // access to this.getDOMNode()
+        // ideal place to peform an AJAX request
+        alert('component mounted! in componentDidMount');
+      },
+
+      // invoked whenever there is a prop change
+      // called prior to render
+      componentWillReceiveProps: function(nextProps) {
+        // Not called on the initial render
+        // previous props can be accessed by this.props
+        // calling setState here does not trigger an additional re-render
+        // Use this method as a way to react to a prop change before render() is called by updating the state with setState.
+        alert('component about to recieve props! in componentWillReceiveProps');
+      },
+
+      // called immediately before a component is unmounted (removed from DOM)
+      componentWillUnmount: function() {
+        // ie: clean up a firebase db reference
+      },
+
+      addFriend: function(friend){
+        this.state.friends.push(friend);
+        this.setState({
+          friends: this.state.friends
+        });
+      },
+      render: function() {
+        return (
+          <div>
+            <h3> Name: {this.state.name} </h3>
+            <AddFriend addNew={this.addFriend} />
+            <ShowList names={this.state.friends} />
+          </div>
+        )
+      }
+    });
+
+    var AddFriend = React.createClass({
+      getInitialState: function(){
+        return {
+          newFriend: ''
+        }
+      },
+      propTypes: {
+        // propTypes controls presence or types of certain props passed to a child component
+        // here we specify that addNew has to be a function
+        addNew: React.PropTypes.func.isRequired
+
+      },
+      updateNewFriend: function(e){
+        this.setState({
+          newFriend: e.target.value
+        });
+      },
+      handleAddNew: function(){
+        this.props.addNew(this.state.newFriend);
+        this.setState({
+          newFriend: ''
+        });
+      },
+      render: function(){
+        return (
+          <div>
+            <input type="text" value={this.state.newFriend} onChange={this.updateNewFriend} />
+            <button onClick={this.handleAddNew}> Add Friend! </button>
+          </div>
+        )
+      }
+    })
+
+    var ShowList = React.createClass({
+      getDefaultProps: function() {
+        // set a default value for names, in case none are passed
+        return {
+          names: []
+        }
+      },
+      render: function(){
+        // iterate over our friends array and wrap each item in a list tag
+        var listItems = this.props.names.map(function(friend){
+          return <li>{friend}</li>
+        });
+
+        console.log(listItems);
+
+        return (
+          <div>
+            <h3> Friends </h3>
+            <ul>
+              {listItems}
+            </ul>
+          </div>
+        )
+      }
+    });
+
+    /*
+     * Render our components in our app container div 
+     * note that in v 0.14 ReactDOM.render() replaces React.render() 
+     */
+    ReactDOM.render(
+      <FriendsContainer />, 
+      document.getElementById('app')
+    );
+
+    </script>
+  </body>
+</html>
