@@ -3,7 +3,7 @@ A bare bones example of setting up React with Gulp and Browserify.
 
 **Code credit / inspiration** taken / stolen from [Tyler McGinnis](http://twitter.com/tylermcginnis33)'s awesome, multi-part [React.JS Tutorial](http://tylermcginnis.com/reactjs-tutorial-pt-2-building-react-applications-with-gulp-and-browserify/).
 
-I've included the `dist/` directory (it's typically a no no to include compiled code in a repo, right?) so that you can see how the `index.html` file in `dist/` is altered to use `build.min.js` after running `gulp production`. Running plain old `gulp` will use the `index.html` file from `src/` and 
+I've included the `dist/` directory (it's typically a no no to include compiled code in a repo, right?) so that you can see how the `index.html` file in `dist/` is altered to use `build.min.js` after running `gulp production`.  
 
 ## React Notes
 *These are expanded on from [React.JS Tutorial](http://tylermcginnis.com/reactjs-tutorial-pt-2-building-react-applications-with-gulp-and-browserify/)*
@@ -37,6 +37,7 @@ Events that will fire at various points in time during the component's life
 
 ### Events
 Events that React will listen for to update a component's state.
+
   - `onClick`
   - `onSubmit`
   - `onChange` works nicely with `<input type="text">`
