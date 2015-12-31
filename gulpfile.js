@@ -7,6 +7,7 @@ var watchify = require('watchify');
 var reactify = require('reactify');
 var streamify = require('gulp-streamify');
 
+// object containing file names and paths for output
 var path = {
   HTML: 'src/index.html',
   MINIFIED_OUT: 'build.min.js',
@@ -42,10 +43,7 @@ gulp.task('watch', function() {
       .pipe(gulp.dest(path.DEST_SRC))
       console.log('Updated');
   })
-    .bundle().on('error', function(err){
-      console.log(err.message)
-      this.end();
-    })
+    .bundle()
     .pipe(source(path.OUT))
     .pipe(gulp.dest(path.DEST_SRC));
 });
